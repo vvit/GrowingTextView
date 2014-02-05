@@ -32,6 +32,7 @@
 
 @property (nonatomic, strong) NSString *placeholder;
 @property (nonatomic, strong) UIColor *placeholderColor;
+@property (nonatomic, assign) UIEdgeInsets extraInset;
 @property (nonatomic) BOOL displayPlaceHolder;
 
 @end
