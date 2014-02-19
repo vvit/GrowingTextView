@@ -125,7 +125,7 @@
             inset = self.textContainerInset;
         }
         
-        [UIView transitionWithView:self duration:.15 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [UIView transitionWithView:self duration:.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             
             // iOS 7 only.
             if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1)
