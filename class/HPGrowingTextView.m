@@ -119,11 +119,10 @@
     {
         // Used to correct the scroll position after loading the view on iOS < 7
         
-        double delayInSeconds = 0.5;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString *previousText = self.text;
             self.text = @"\n";
-            self.text = @"";
+            self.text = previousText;
         });
     }
 }
@@ -272,7 +271,8 @@
     if (newSizeH < _minHeight + _contentInset.top + _contentInset.bottom || !_internalTextView.hasText) {
         newSizeH = _minHeight + _contentInset.top + _contentInset.bottom; //not smalles than minHeight
     }
-    else if (_maxHeight && newSizeH > _maxHeight) {
+    else if (_maxHeight && newSizeH > _maxHeight)
+    {
         newSizeH = _maxHeight; // not taller than maxHeight
     }
     
@@ -282,9 +282,10 @@
         // thanks to Gwynne <http://blog.darkrainfall.org/>
         if (newSizeH <= _maxHeight)
         {
-            if(_animateHeightChange) {
-                
-                if ([UIView resolveClassMethod:@selector(animateWithDuration:animations:)]) {
+            if(_animateHeightChange)
+            {
+                if ([UIView resolveClassMethod:@selector(animateWithDuration:animations:)])
+                {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
                     [UIView animateWithDuration:_animationDuration
                                           delay:0
@@ -294,12 +295,12 @@
                                          [self resizeTextView:newSizeH];
                                      }
                                      completion:^(BOOL finished) {
-                                         if ([_delegate respondsToSelector:@selector(growingTextView:didChangeHeight:)]) {
-                                             [_delegate growingTextView:self didChangeHeight:newSizeH];
-                                         }
+                                         [self growDidStop];
                                      }];
 #endif
-                } else {
+                }
+                else
+                {
                     [UIView beginAnimations:@"" context:nil];
                     [UIView setAnimationDuration:_animationDuration];
                     [UIView setAnimationDelegate:self];
@@ -308,7 +309,9 @@
                     [self resizeTextView:newSizeH];
                     [UIView commitAnimations];
                 }
-            } else {
+            }
+            else
+            {
                 [self resizeTextView:newSizeH];
                 // [fixed] The growingTextView:didChangeHeight: delegate method was not called at all when not animating height changes.
                 // thanks to Gwynne <http://blog.darkrainfall.org/>
@@ -373,7 +376,8 @@
     // set scroll enabled.
     if (self.frame.size.height >= _maxHeight)
     {
-        if (!_internalTextView.scrollEnabled) {
+        if (!_internalTextView.scrollEnabled)
+        {
             _internalTextView.scrollEnabled = YES;
             [_internalTextView flashScrollIndicators];
             
@@ -382,8 +386,9 @@
             // Laying out the subviews appears to fixes it.
             [_internalTextView performSelector:@selector(setNeedsLayout) withObject:nil afterDelay:.3];
         }
-        
-    } else {
+    }
+    else
+    {
         _internalTextView.scrollEnabled = NO;
     }
 }

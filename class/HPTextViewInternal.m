@@ -102,7 +102,15 @@
 {
     [super setContentSize:contentSize];
     
-    [self scrollRangeToVisible:self.selectedRange];
+    if (self.selectedTextRange)
+    {
+        CGRect cursorRect = [self caretRectForPosition:self.selectedTextRange.start];
+        [self scrollRectToVisible:cursorRect animated:YES];
+    }
+    else
+    {
+        [self scrollRangeToVisible:self.selectedRange];
+    }
 }
 
 - (void)drawRect:(CGRect)rect
@@ -112,22 +120,26 @@
     if (self.displayPlaceHolder && self.placeholder && self.placeholderColor)
     {
         UIEdgeInsets inset = self.contentInset;
-        if ([self respondsToSelector:@selector(textContainerInset)])
+        if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1)
         {
             inset = self.textContainerInset;
         }
         
-        if ([self respondsToSelector:@selector(snapshotViewAfterScreenUpdates:)])
-        {
-            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-            paragraphStyle.alignment = self.textAlignment;
-            [self.placeholder drawInRect:CGRectMake(5.0 + inset.left, inset.top, self.frame.size.width - inset.left, self.frame.size.height - inset.top) withAttributes:@{NSFontAttributeName:self.font, NSForegroundColorAttributeName:self.placeholderColor, NSParagraphStyleAttributeName:paragraphStyle}];
-        }
-        else
-        {
-            [self.placeholderColor set];
-            [self.placeholder drawInRect:CGRectMake(8.0 + inset.left, inset.top + 8.0, self.frame.size.width - inset.left - 16.0, self.frame.size.height - inset.top) withFont:self.font];
-        }
+        [UIView transitionWithView:self duration:.15 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            
+            // iOS 7 only.
+            if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1)
+            {
+                NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+                paragraphStyle.alignment = self.textAlignment;
+                [self.placeholder drawInRect:CGRectMake(5.0 + inset.left, inset.top, self.frame.size.width - inset.left, self.frame.size.height - inset.top) withAttributes:@{NSFontAttributeName:self.font, NSForegroundColorAttributeName:self.placeholderColor, NSParagraphStyleAttributeName:paragraphStyle}];
+            }
+            else
+            {
+                [self.placeholderColor set];
+                [self.placeholder drawInRect:CGRectMake(8.0 + inset.left, inset.top + 8.0, self.frame.size.width - inset.left - 8.0, self.frame.size.height - inset.top) withFont:self.font];
+            }
+        } completion:nil];
     }
 }
 

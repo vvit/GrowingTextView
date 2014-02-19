@@ -29,7 +29,6 @@
 
 #import <UIKit/UIKit.h>
 
-
 @interface HPTextViewInternal : UITextView
 
 @property (nonatomic, strong) NSString *placeholder;
