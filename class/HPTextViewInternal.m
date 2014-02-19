@@ -27,15 +27,17 @@
 
 #import "HPTextViewInternal.h"
 
-
 @implementation HPTextViewInternal
 
--(void)setText:(NSString *)text
+- (void)setText:(NSString *)text
 {
+    // If one of GrowingTextView's superviews is a scrollView, and self.scrollEnabled == NO,
+    // setting the text programatically will cause UIKit to search upwards until
+    // it finds a scrollView with scrollEnabled == yes then scroll it erratically.
+    // Setting scrollEnabled temporarily to YES prevents this.
+    
     BOOL originalValue = self.scrollEnabled;
-    //If one of GrowingTextView's superviews is a scrollView, and self.scrollEnabled == NO,
-    //setting the text programatically will cause UIKit to search upwards until it finds a scrollView with scrollEnabled==yes
-    //then scroll it erratically. Setting scrollEnabled temporarily to YES prevents this.
+    
     [self setScrollEnabled:YES];
     [super setText:text];
     [self setScrollEnabled:originalValue];
@@ -48,28 +50,30 @@
 
 -(void)setContentOffset:(CGPoint)s
 {
-    if (self.tracking || self.decelerating)
-    {
-        //initiated by user...
-        
-        UIEdgeInsets insets = self.contentInset;
-        insets.bottom = 0;
-        insets.top = 0;
-        self.contentInset = insets;
-        
-    }
-    else
-    {
-        
-        CGFloat bottomOffset = (self.contentSize.height - self.frame.size.height + self.contentInset.bottom);
-        if (s.y < bottomOffset && self.scrollEnabled)
-        {
-            UIEdgeInsets insets = self.contentInset;
-            insets.bottom = 8;
-            insets.top = 0;
-            self.contentInset = insets;
-        }
-    }
+    /*
+     if (self.tracking || self.decelerating)
+     {
+     //initiated by user...
+     
+     UIEdgeInsets insets = self.contentInset;
+     insets.bottom = 0;
+     insets.top = 0;
+     self.contentInset = insets;
+     
+     }
+     else
+     {
+     
+     CGFloat bottomOffset = (self.contentSize.height - self.frame.size.height + self.contentInset.bottom);
+     if (s.y < bottomOffset && self.scrollEnabled)
+     {
+     UIEdgeInsets insets = self.contentInset;
+     insets.bottom = 8;
+     insets.top = 0;
+     self.contentInset = insets;
+     }
+     }
+     */
     
     // Fix "overscrolling" bug
     if (s.y > self.contentSize.height - self.frame.size.height && !self.decelerating && !self.tracking && !self.dragging)
@@ -77,14 +81,12 @@
         s = CGPointMake(s.x, self.contentSize.height - self.frame.size.height);
     }
     
+    
     [super setContentOffset:s];
 }
 
 -(void)setContentInset:(UIEdgeInsets)inset
 {
-    if (inset.bottom > 8) inset.bottom = 0;
-    inset.top = 0;
-    
     inset.top += self.extraInset.top;
     inset.bottom += self.extraInset.bottom;
     inset.left += self.extraInset.left;
@@ -95,16 +97,9 @@
 
 -(void)setContentSize:(CGSize)contentSize
 {
-    // Is this an iOS5 bug? Need testing!
-    if(self.contentSize.height > contentSize.height)
-    {
-        UIEdgeInsets insets = self.contentInset;
-        insets.bottom = 0;
-        insets.top = 0;
-        self.contentInset = insets;
-    }
-    
     [super setContentSize:contentSize];
+    
+    [self scrollRangeToVisible:self.selectedRange];
 }
 
 - (void)drawRect:(CGRect)rect
@@ -123,17 +118,17 @@
         {
             NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
             paragraphStyle.alignment = self.textAlignment;
-            [self.placeholder drawInRect:CGRectMake(5, inset.top, self.frame.size.width - inset.left, self.frame.size.height - inset.top) withAttributes:@{NSFontAttributeName:self.font, NSForegroundColorAttributeName:self.placeholderColor, NSParagraphStyleAttributeName:paragraphStyle}];
+            [self.placeholder drawInRect:CGRectMake(5.0 + inset.left, inset.top, self.frame.size.width - inset.left, self.frame.size.height - inset.top) withAttributes:@{NSFontAttributeName:self.font, NSForegroundColorAttributeName:self.placeholderColor, NSParagraphStyleAttributeName:paragraphStyle}];
         }
         else
         {
             [self.placeholderColor set];
-            [self.placeholder drawInRect:CGRectMake(8.0f, 8.0f, self.frame.size.width - 16.0f, self.frame.size.height - 16.0f) withFont:self.font];
+            [self.placeholder drawInRect:CGRectMake(8.0 + inset.left, inset.top + 8.0, self.frame.size.width - inset.left - 16.0, self.frame.size.height - inset.top) withFont:self.font];
         }
     }
 }
 
--(void)setPlaceholder:(NSString *)placeholder
+- (void)setPlaceholder:(NSString *)placeholder
 {
     _placeholder = placeholder;
     

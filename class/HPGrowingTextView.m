@@ -117,6 +117,18 @@
 
     [self setPlaceholderColor:[UIColor lightGrayColor]];
     internalTextView.displayPlaceHolder = YES;
+    
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1)
+    {
+        // Used to correct the scroll position after loading the view on iOS < 7
+        
+        double delayInSeconds = 0.5;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            self.text = @"\n";
+            self.text = @"";
+        });
+    }
 }
 
 -(CGSize)sizeThatFits:(CGSize)size
