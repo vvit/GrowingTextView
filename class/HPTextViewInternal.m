@@ -137,7 +137,7 @@
             else
             {
                 [self.placeholderColor set];
-                [self.placeholder drawInRect:CGRectMake(8.0 + inset.left, inset.top + 8.0, self.frame.size.width - inset.left - 8.0, self.frame.size.height - inset.top) withFont:self.font];
+                [self.placeholder drawInRect:CGRectMake(8.0 + inset.left, inset.top + 4.0, self.frame.size.width - inset.left - 8.0, self.frame.size.height - inset.top) withFont:self.font];
             }
         } completion:nil];
     }
