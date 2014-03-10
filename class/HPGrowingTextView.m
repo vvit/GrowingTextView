@@ -266,11 +266,16 @@
 
 - (void)refreshHeight
 {
-    // Size the content to min and max height.
-    CGFloat topInternalContentInset = self.internalTextView.contentInset.top;
-    CGFloat bottomInternalContentInset = self.internalTextView.contentInset.bottom;
+    NSInteger newSizeH = [self measureHeight] + _contentInset.top + _contentInset.bottom;
     
-    NSInteger newSizeH = [self measureHeight] + _contentInset.top + _contentInset.bottom + topInternalContentInset + bottomInternalContentInset;
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1)
+    {
+        // Size the content to min and max height.
+        CGFloat topInternalContentInset = self.internalTextView.contentInset.top;
+        CGFloat bottomInternalContentInset = self.internalTextView.contentInset.bottom;
+        
+        newSizeH += topInternalContentInset + bottomInternalContentInset;
+    }
     
     if (newSizeH < _minHeight + _contentInset.top + _contentInset.bottom || !_internalTextView.hasText) {
         newSizeH = _minHeight + _contentInset.top + _contentInset.bottom;
