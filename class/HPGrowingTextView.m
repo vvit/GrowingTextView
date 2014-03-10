@@ -275,7 +275,8 @@
     if (newSizeH < _minHeight + _contentInset.top + _contentInset.bottom || !_internalTextView.hasText) {
         newSizeH = _minHeight + _contentInset.top + _contentInset.bottom;
     }
-    else if (_maxHeight && newSizeH > _maxHeight)
+    
+    if (_maxHeight && newSizeH > _maxHeight)
     {
         newSizeH = _maxHeight;
     }

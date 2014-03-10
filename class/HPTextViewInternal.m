@@ -52,32 +52,6 @@
 
 -(void)setContentOffset:(CGPoint)s
 {
-    // TODO: Not sure if any of this is even necessary.
-    /*
-     if (self.tracking || self.decelerating)
-     {
-     //initiated by user...
-     
-     UIEdgeInsets insets = self.contentInset;
-     insets.bottom = 0;
-     insets.top = 0;
-     self.contentInset = insets;
-     
-     }
-     else
-     {
-     
-     CGFloat bottomOffset = (self.contentSize.height - self.frame.size.height + self.contentInset.bottom);
-     if (s.y < bottomOffset && self.scrollEnabled)
-     {
-     UIEdgeInsets insets = self.contentInset;
-     insets.bottom = 8;
-     insets.top = 0;
-     self.contentInset = insets;
-     }
-     }
-     */
-    
     // Fix "overscrolling" bug
     if (s.y > self.contentSize.height - self.frame.size.height && !self.decelerating && !self.tracking && !self.dragging)
     {
@@ -132,12 +106,12 @@
             {
                 NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
                 paragraphStyle.alignment = self.textAlignment;
-                [self.placeholder drawInRect:CGRectMake(5.0 + inset.left, inset.top, self.frame.size.width - inset.left, self.frame.size.height - inset.top) withAttributes:@{NSFontAttributeName:self.font, NSForegroundColorAttributeName:self.placeholderColor, NSParagraphStyleAttributeName:paragraphStyle}];
+                [self.placeholder drawInRect:CGRectMake(5.0 + inset.left, inset.top, self.frame.size.width - inset.left, self.frame.size.height) withAttributes:@{NSFontAttributeName:self.font, NSForegroundColorAttributeName:self.placeholderColor, NSParagraphStyleAttributeName:paragraphStyle}];
             }
             else
             {
                 [self.placeholderColor set];
-                [self.placeholder drawInRect:CGRectMake(8.0 + inset.left, inset.top + 4.0, self.frame.size.width - inset.left - 8.0, self.frame.size.height - inset.top) withFont:self.font];
+                [self.placeholder drawInRect:CGRectMake(8.0 + inset.left, inset.top + 4.0, self.frame.size.width - inset.left - 8.0, self.frame.size.height) withFont:self.font];
             }
         } completion:nil];
     }
