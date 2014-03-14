@@ -111,7 +111,7 @@
             else
             {
                 [self.placeholderColor set];
-                [self.placeholder drawInRect:CGRectMake(8.0 + inset.left, inset.top + 4.0, self.frame.size.width - inset.left - 8.0, self.frame.size.height) withFont:self.font];
+                [self.placeholder drawInRect:CGRectMake(8.0 + inset.left, 4.0, self.frame.size.width - inset.left - 8.0, self.frame.size.height) withFont:self.font];
             }
         } completion:nil];
     }
