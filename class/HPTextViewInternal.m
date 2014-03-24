@@ -50,16 +50,15 @@
     [super setScrollEnabled:isScrollable];
 }
 
--(void)setContentOffset:(CGPoint)s
+-(void)setContentOffset:(CGPoint)contentOffset
 {
     // Fix "overscrolling" bug
-    if (s.y > self.contentSize.height - self.frame.size.height && !self.decelerating && !self.tracking && !self.dragging)
+    if (contentOffset.y > self.contentSize.height - self.frame.size.height && !self.decelerating && !self.tracking && !self.dragging)
     {
-        s = CGPointMake(s.x, self.contentSize.height - self.frame.size.height);
+        contentOffset = CGPointMake(contentOffset.x, self.contentSize.height - self.frame.size.height);
     }
     
-    
-    [super setContentOffset:s];
+    [super setContentOffset:contentOffset];
 }
 
 -(void)setContentInset:(UIEdgeInsets)inset
@@ -111,7 +110,7 @@
             else
             {
                 [self.placeholderColor set];
-                [self.placeholder drawInRect:CGRectMake(8.0 + inset.left, 4.0, self.frame.size.width - inset.left - 8.0, self.frame.size.height) withFont:self.font];
+                [self.placeholder drawInRect:CGRectMake(8.0 + inset.left, 8.0, self.frame.size.width - inset.left - 8.0, self.frame.size.height) withFont:self.font];
             }
         } completion:nil];
     }

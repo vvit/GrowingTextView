@@ -391,12 +391,12 @@
         {
             _internalTextView.scrollEnabled = YES;
             [_internalTextView flashScrollIndicators];
-            
-            // When copy and pasting a multi-line text if height exceeds maxheight
-            // the text view does not scroll even though scrollEnabled is set ON.
-            // Laying out the subviews appears to fixes it.
-            [_internalTextView performSelector:@selector(setNeedsLayout) withObject:nil afterDelay:.3];
         }
+        
+        // When copy and pasting a multi-line text if height exceeds maxheight
+        // the text view does not scroll even though scrollEnabled is set ON.
+        // Laying out the subviews appears to fix it.
+        [_internalTextView performSelector:@selector(setNeedsLayout) withObject:nil afterDelay:.3];
     }
     else
     {
@@ -420,10 +420,7 @@
     internalTextViewFrame.size.width -= _contentInset.left + _contentInset.right;
     internalTextViewFrame.size.height -= _contentInset.top + _contentInset.bottom;
     
-    if (!CGRectEqualToRect(_internalTextView.frame, internalTextViewFrame))
-    {
-        _internalTextView.frame = internalTextViewFrame;
-    }
+    _internalTextView.frame = internalTextViewFrame;
     
     [self correctScrolling];
 }
