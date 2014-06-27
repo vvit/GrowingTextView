@@ -115,16 +115,14 @@
     [self setPlaceholderColor:[UIColor lightGrayColor]];
     _internalTextView.displayPlaceHolder = YES;
     
-    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1)
-    {
-        // Used to correct the scroll position after loading the view on iOS < 7
+    // Used to correct the scroll position after loading the view on iOS < 7
+    // and correct min-height after initial nib autoresizing > 7.
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *previousText = self.text;
-            self.text = @"\n";
-            self.text = previousText;
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *previousText = self.text;
+        self.text = @"\n";
+        self.text = previousText;
+    });
 }
 
 - (CGSize)sizeThatFits:(CGSize)size
