@@ -284,7 +284,7 @@
         newSizeH = _maxHeight;
     }
     
-    if (_internalTextView.frame.size.height != newSizeH)
+    if (self.frame.size.height != newSizeH)
     {
         // [Fixed] Pasting too much text into the view failed to fire the height change,
         // thanks to Gwynne <http://blog.darkrainfall.org/>.
