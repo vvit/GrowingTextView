@@ -75,6 +75,14 @@
 {
     [super setContentSize:contentSize];
     
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1)
+    {
+        // If the content size exceeds the bounds of the view, sometimes
+        // UITextView will lock the textContainer size at the view bounds rather
+        // than adjusting with the content size.
+        self.textContainer.size = contentSize;
+    }
+    
     if (self.selectedTextRange)
     {
         CGRect cursorRect = [self caretRectForPosition:self.selectedTextRange.start];
