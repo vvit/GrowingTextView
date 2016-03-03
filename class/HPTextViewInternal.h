@@ -35,5 +35,6 @@
 @property (nonatomic, strong) UIColor *placeholderColor;
 @property (nonatomic, assign) UIEdgeInsets extraInset;
 @property (nonatomic) BOOL displayPlaceHolder;
+@property (nonatomic, assign) BOOL caretInitialized;
 
 @end

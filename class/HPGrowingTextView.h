@@ -69,6 +69,7 @@
 @property (nonatomic, assign) NSUInteger maxHeight;
 @property (nonatomic, assign) NSUInteger minHeight;
 @property BOOL animateHeightChange;
+@property (nonatomic, assign) BOOL caretInitialized;
 
 
 // UITextView proxied properties.

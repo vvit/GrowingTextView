@@ -257,6 +257,16 @@
     [_internalTextView setPlaceholderColor:placeholderColor];
 }
 
+- (BOOL)caretInitialized
+{
+    return _internalTextView.caretInitialized;
+}
+
+- (void)setCaretInitialized:(BOOL)caretInitialized
+{
+    _internalTextView.caretInitialized = caretInitialized;
+}
+
 - (void)textViewDidChange:(UITextView *)textView
 {
     [self refreshHeight];

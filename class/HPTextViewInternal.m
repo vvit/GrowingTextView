@@ -83,7 +83,7 @@
         self.textContainer.size = contentSize;
     }
     
-    if (self.selectedTextRange)
+    if (self.selectedTextRange && _caretInitialized)
     {
         CGRect cursorRect = [self caretRectForPosition:self.selectedTextRange.start];
         [self scrollRectToVisible:cursorRect animated:YES];
